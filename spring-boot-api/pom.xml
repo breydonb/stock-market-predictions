@@ -20,15 +20,18 @@
 	<developers>
 		<developer/>
 	</developers>
+
 	<scm>
 		<connection/>
 		<developerConnection/>
 		<tag/>
 		<url/>
 	</scm>
+
 	<properties>
 		<java.version>24</java.version>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -46,10 +49,6 @@
 		<dependency>
 			<groupId>io.micrometer</groupId>
 			<artifactId>micrometer-registry-prometheus</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -71,28 +70,21 @@
 				</configuration>
 				<executions>
 					<execution>
-						<phase>validate</phase>
-						<goals>
-							<goal>check</goal>
-						</goals>
+					<phase>validate</phase>
+					<goals>
+						<goal>check</goal>
+					</goals>
 					</execution>
 				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-enforcer-plugin</artifactId>
-				<executions>
-					<execution>
-					<goals><goal>enforce</goal></goals>
-					<configuration>
-						<rules>
-						<requireJavaVersion>
-							<version>[17,)</version> <!-- Enforce JDK 17+ -->
-						</requireJavaVersion>
-						</rules>
-					</configuration>
-					</execution>
-				</executions>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.14.0</version>
+				<configuration>
+					<!-- Compile with JDK 24 but target Java 20 bytecode -->
+					<release>17</release>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
