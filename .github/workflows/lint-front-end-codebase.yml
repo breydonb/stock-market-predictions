@@ -8,6 +8,13 @@ on:
     paths:
       - "front-end/**"
       - ".github/workflows/**"
+  pull_request:
+    branches:
+      - "dev/**"
+      - "staged/*"
+    paths:
+      - "front-end/**"
+      - ".github/workflows/**"
 
 jobs:
   linting_codebase:
