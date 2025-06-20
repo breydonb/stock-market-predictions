@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout release branches
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Configure git
         run: |
@@ -21,7 +23,7 @@ jobs:
         run: |
           git fetch origin main
           git checkout main
-          get merge --no-ff ${{ github.ref_name }} -m "Merging release branch ${{ github.ref_name }} into main"
+          git merge --no-ff ${GITHUB_REF_NAME} -m "Merging release branch ${GITHUB_REF_NAME} into main"
           git push origin main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
