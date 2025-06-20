@@ -37,4 +37,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           RELEASE_BRANCH=${GITHUB_REF#refs/heads/}
-          git push origin --delete "$RELEASE_BRANCH"
+          echo "Release branch is: $RELEASE_BRANCH"
+          if [ "$RELEASE_BRANCH" != "main" ]; then
+            git push origin --delete "$RELEASE_BRANCH"
+          else
+            echo "Skipping deletion of main branch"
+          fi
