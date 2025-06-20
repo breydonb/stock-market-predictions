@@ -1,0 +1,15 @@
+scrape_configs:
+  - job_name: 'spring-boot-api'
+    scheme: "http"
+    metrics_path: "/api/prometheus"
+    static_configs:
+      - targets: ['stock-market-prediction-spring-boot-api-1:8080']
+
+  - job_name: 'jenkins'
+    scheme: "http"
+    metrics_path: "/prometheus"
+    static_configs:
+      - targets: ['stock-market-prediction-jenkins-app-1:8080']
+    basic_auth:
+      username: "prometheus-user"
+      password_file: "/secrets/jenkins_token"
