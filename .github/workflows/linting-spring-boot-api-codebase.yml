@@ -1,0 +1,38 @@
+name: Linting SpringBoot API Codebase
+
+on:
+  push:
+    branches:
+      - "dev/**"
+      - "staged/**"
+  pull_request:
+    branches:
+      - "dev/**"
+      - "staged/**"
+jobs:
+  linting-api-codebase:
+    name: Linting SpringBootAPI Codebase
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven-
+        
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: "21"
+          
+      - name: Build project (skip testing)
+        run: "cd ./spring-boot-api && mvn clean install -DskipTests"
+        
+      - name: Run Linter
+        run: "cd ./spring-boot-api && mvn validate"
