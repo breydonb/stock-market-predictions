@@ -3,7 +3,8 @@ name: Merge Release to Main
 on:
   push:
     branches:
-      - "release/*"
+      - "release/**"
+
 jobs:
   merge-to-main:
     runs-on: ubuntu-latest
@@ -20,10 +21,19 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Merge release branch into main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          RELEASE_BRANCH=${GITHUB_REF#refs/heads/}
           git fetch origin main
           git checkout main
-          git merge --no-ff ${GITHUB_REF_NAME} -m "Merging release branch ${GITHUB_REF_NAME} into main"
-          git push origin main
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git pull origin main
+          git merge --no-ff "$RELEASE_BRANCH" -m "Merging release branch $RELEASE_BRANCH into main" || { echo "Merge conflict detected, aborting."; git merge --abort; exit 1; }
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} main
+
+      - name: Delete remote release branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          RELEASE_BRANCH=${GITHUB_REF#refs/heads/}
+          git push origin --delete "$RELEASE_BRANCH"
