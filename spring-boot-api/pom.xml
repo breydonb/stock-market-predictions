@@ -82,8 +82,7 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.14.0</version>
 				<configuration>
-					<!-- Compile with JDK 24 but target Java 20 bytecode -->
-					<release>17</release>
+					<release>${java.version}</release>
 				</configuration>
 			</plugin>
 		</plugins>
