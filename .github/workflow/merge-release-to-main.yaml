@@ -1,0 +1,27 @@
+name: Merge Release to Main
+
+on:
+  push:
+    branches:
+      - "release/*"
+jobs:
+  merge-to-main:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout release branches
+        uses: actions/checkout@v3
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Merge release branch into main
+        run: |
+          git fetch origin main
+          git checkout main
+          get merge --no-ff ${{ github.ref_name }} -m "Merging release branch ${{ github.ref_name }} into main"
+          git push origin main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
