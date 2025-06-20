@@ -59,6 +59,7 @@ jenkins_config/
 workspace/
 *.log
 *.tmp
+jenkins_token
 
 # ========
 # OS Files

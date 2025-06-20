@@ -1,12 +1,12 @@
-Jun 20, 2025 9:37:52 AM hudson.remoting.Launcher createEngine
+Jun 20, 2025 6:10:40 PM hudson.remoting.Launcher createEngine
 INFO: Setting up agent: docker-agent
-Jun 20, 2025 9:37:52 AM hudson.remoting.Engine startEngine
+Jun 20, 2025 6:10:40 PM hudson.remoting.Engine startEngine
 INFO: Using Remoting version: 3309.v27b_9314fd1a_4
-Jun 20, 2025 9:37:52 AM org.jenkinsci.remoting.engine.WorkDirManager initializeWorkDir
+Jun 20, 2025 6:10:40 PM org.jenkinsci.remoting.engine.WorkDirManager initializeWorkDir
 INFO: Using /home/jenkins/agent/remoting as a remoting work directory
-Jun 20, 2025 9:37:52 AM hudson.remoting.Launcher$CuiListener status
+Jun 20, 2025 6:10:41 PM hudson.remoting.Launcher$CuiListener status
 INFO: Locating server among [http://stock-market-prediction-jenkins-app-1:8080/]
-Jun 20, 2025 9:37:52 AM hudson.remoting.Launcher$CuiListener status
+Jun 20, 2025 6:10:41 PM hudson.remoting.Launcher$CuiListener status
 INFO: Could not locate server among [http://stock-market-prediction-jenkins-app-1:8080/]; waiting 10 seconds before retry
 java.io.IOException: Failed to connect to http://stock-market-prediction-jenkins-app-1:8080/tcpSlaveAgentListener/: Connection refused
 	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:230)
@@ -31,26 +31,26 @@ Caused by: java.net.ConnectException: Connection refused
 	at org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver.resolve(JnlpAgentEndpointResolver.java:227)
 	... 2 more
 
-Jun 20, 2025 9:38:03 AM hudson.remoting.Launcher$CuiListener status
+Jun 20, 2025 6:10:51 PM hudson.remoting.Launcher$CuiListener status
 INFO: Locating server among [http://stock-market-prediction-jenkins-app-1:8080/]
-Jun 20, 2025 9:38:03 AM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+Jun 20, 2025 6:10:51 PM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
 INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
-Jun 20, 2025 9:38:03 AM hudson.remoting.Launcher$CuiListener status
+Jun 20, 2025 6:10:51 PM hudson.remoting.Launcher$CuiListener status
 INFO: Agent discovery successful
   Agent address: stock-market-prediction-jenkins-app-1
   Agent port:    50000
   Identity:      94:33:98:51:6b:54:46:c8:d1:86:00:fe:83:5f:62:03
-Jun 20, 2025 9:38:03 AM hudson.remoting.Launcher$CuiListener status
+Jun 20, 2025 6:10:51 PM hudson.remoting.Launcher$CuiListener status
 INFO: Handshaking
-Jun 20, 2025 9:38:03 AM hudson.remoting.Launcher$CuiListener status
+Jun 20, 2025 6:10:51 PM hudson.remoting.Launcher$CuiListener status
 INFO: Connecting to stock-market-prediction-jenkins-app-1:50000
-Jun 20, 2025 9:38:03 AM hudson.remoting.Launcher$CuiListener status
+Jun 20, 2025 6:10:51 PM hudson.remoting.Launcher$CuiListener status
 INFO: Server reports protocol JNLP4-connect-proxy not supported, skipping
-Jun 20, 2025 9:38:03 AM hudson.remoting.Launcher$CuiListener status
+Jun 20, 2025 6:10:51 PM hudson.remoting.Launcher$CuiListener status
 INFO: Trying protocol: JNLP4-connect
-Jun 20, 2025 9:38:03 AM org.jenkinsci.remoting.protocol.impl.BIONetworkLayer$Reader run
+Jun 20, 2025 6:10:51 PM org.jenkinsci.remoting.protocol.impl.BIONetworkLayer$Reader run
 INFO: Waiting for ProtocolStack to start.
-Jun 20, 2025 9:38:04 AM hudson.remoting.Launcher$CuiListener status
+Jun 20, 2025 6:10:51 PM hudson.remoting.Launcher$CuiListener status
 INFO: Remote identity confirmed: 94:33:98:51:6b:54:46:c8:d1:86:00:fe:83:5f:62:03
-Jun 20, 2025 9:38:04 AM hudson.remoting.Launcher$CuiListener status
+Jun 20, 2025 6:10:51 PM hudson.remoting.Launcher$CuiListener status
 INFO: Connected
