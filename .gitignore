@@ -59,6 +59,12 @@ jenkins_config/
 workspace/
 *.log
 *.tmp
+jenkins_token
+
+# Jenkins Agent
+remoting.jar
+caches*
+remoting*
 
 # ========
 # OS Files
