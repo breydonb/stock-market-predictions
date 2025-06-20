@@ -5,10 +5,18 @@ on:
     branches:
       - "dev/**"
       - "staged/**"
+    paths:
+      - "spring-boot-api/src/**"
+      - "spring-boot-api/pom.xml"
+      - ".github/workflows/**"
   pull_request:
     branches:
       - "dev/**"
       - "staged/**"
+    paths:
+      - "spring-boot-api/src/**"
+      - "spring-boot-api/pom.xml"
+      - ".github/workflows/**"
 jobs:
   linting-api-codebase:
     name: Linting SpringBootAPI Codebase
