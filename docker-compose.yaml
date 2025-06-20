@@ -40,6 +40,7 @@ services:
         ipv4_address: 172.28.0.2
   jenkins-app:
     image: "jenkins/jenkins:lts"
+    restart: "always"
     user: root
     ports:
       - "7070:8080"
@@ -61,10 +62,10 @@ services:
     - ./etl:/home/etl
     - ./.env:/home/etl/.env
     environment:
-      DB_HOST: ${DB_HOST}
-      DB_USER: ${DB_USER}
-      DB_PASS: ${DB_PASS}
-      DB_NAME: ${DB_NAME}
+      DB_HOST: "${DB_HOST:-database}"
+      DB_USER: "${DB_USER:-postgres}"
+      DB_PASS: "${DB_PASS:-admin}"
+      DB_NAME: "${DB_NAME:-postgres}"
     depends_on:
       - database
       - jenkins-app
@@ -102,11 +103,21 @@ services:
         ipv4_address: 172.28.0.5
   docker-jenkins-agent:
     image: jenkins/inbound-agent:latest
+    user: "root"
     environment:
       - JENKINS_URL=http://stock-market-prediction-jenkins-app-1:8080
       - JENKINS_AGENT_NAME=docker-agent
       - JENKINS_AGENT_WORKDIR=/home/jenkins/agent
       - JENKINS_SECRET=e3658408128e01e7ddbfd7d6b4648a3e3a9ce73895372fac474cbd7967c0c12e
+      - DB_HOST=database
+      - DB_USER=postgres
+      - DB_PASS=admin
+      - DB_NAME=postgres
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+      - /usr/bin/docker-compose:/usr/bin/docker-compose
+      - ./jenkins-agent-workspace:/home/jenkins/agent
     networks:
       stock-prediction-network:
         ipv4_address: 172.28.0.12
