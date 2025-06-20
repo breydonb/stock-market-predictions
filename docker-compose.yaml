@@ -1,0 +1,118 @@
+services:
+  database:
+    image: postgres
+    restart: always
+    shm_size: 128mb
+    environment:
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"
+    networks:
+      stock-prediction-network:
+        ipv4_address: 172.28.0.4
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      stock-prediction-network:
+        ipv4_address: 172.28.0.6
+
+  svelt-app:
+    image: "node:latest"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./front-end:/home/node/app
+    depends_on:
+      - database
+      - spring-boot-api
+    expose:
+      - "5173"
+    ports:
+      - "5173:5173"
+    command: npm run dev --host
+    networks:
+      stock-prediction-network:
+        ipv4_address: 172.28.0.2
+  jenkins-app:
+    image: "jenkins/jenkins:lts"
+    user: root
+    ports:
+      - "7070:8080"
+      - "50000:50000"
+    volumes:
+      - ./jenkins_config:/var/jenkins_home
+    networks:
+      stock-prediction-network:
+        ipv4_address: 172.28.0.10
+  etl-jenkins-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /home/etl
+    user: root
+    ports:
+      - "2222:22"
+    volumes: 
+    - ./etl:/home/etl
+    - ./.env:/home/etl/.env
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_NAME: ${DB_NAME}
+    depends_on:
+      - database
+      - jenkins-app
+    networks:
+      stock-prediction-network:
+        ipv4_address: 172.28.0.11
+  spring-boot-api:
+    image: "openjdk:24"
+    user: root
+    working_dir: /home/spring-boot
+    ports: 
+      - "8443:8080"
+    volumes:
+      - ./spring-boot-api:/home/spring-boot
+    networks:
+      stock-prediction-network:
+        ipv4_address: 172.28.0.3
+    command: ./mvnw spring-boot:run
+  machine-learning:
+    build:
+      context: ./machine_learning
+      dockerfile: Dockerfile
+    user: "root"
+    environment:
+      - VITE_SPRING_BOOT_BASE_URL=http://stock-market-prediction-spring-boot-api-1:8443/api/stock_data
+      - VITE_ML_BASE_URL=http://stock-market-prediction-machine-learning-1:8000/predict
+    ports: 
+      - "8000:8000"
+    depends_on:
+      - spring-boot-api
+    volumes:
+      - ./machine_learning:/home/machine_learning
+    networks:
+      stock-prediction-network:
+        ipv4_address: 172.28.0.5
+  docker-jenkins-agent:
+    image: jenkins/inbound-agent:latest
+    environment:
+      - JENKINS_URL=http://stock-market-prediction-jenkins-app-1:8080
+      - JENKINS_AGENT_NAME=docker-agent
+      - JENKINS_AGENT_WORKDIR=/home/jenkins/agent
+      - JENKINS_SECRET=e3658408128e01e7ddbfd7d6b4648a3e3a9ce73895372fac474cbd7967c0c12e
+    networks:
+      stock-prediction-network:
+        ipv4_address: 172.28.0.12
+networks:
+  stock-prediction-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16

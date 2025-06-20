@@ -1,0 +1,82 @@
+# =========================
+# Node / Svelte / TypeScript
+# =========================
+node_modules/
+dist/
+build/
+*.log
+.env
+.vscode/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.tsbuildinfo
+
+# ==================
+# Spring Boot / Java
+# ==================
+target/
+*.class
+*.jar
+*.war
+*.iml
+*.ipr
+*.iws
+.idea/
+*.log
+.mvn/
+out/
+
+# ====================
+# Python / Microservices
+# ====================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.env
+env/
+venv/
+*.sqlite3
+*.egg-info/
+dist/
+build/
+*.egg
+
+# =========
+# Docker
+# =========
+**/Dockerfile.*
+**/docker-compose*.yml
+*.dockerignore
+*.log
+docker-compose.override.yml
+
+# ===========
+# Jenkins
+# ===========
+jenkins_config/
+workspace/
+*.log
+*.tmp
+
+# ========
+# OS Files
+# ========
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===========
+# IDE / Editor
+# ===========
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ===========
+# Misc
+# ===========
+*.bak
+*.tmp
