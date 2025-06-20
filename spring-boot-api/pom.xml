@@ -71,10 +71,10 @@
 				</configuration>
 				<executions>
 					<execution>
-					<phase>validate</phase>
-					<goals>
-						<goal>check</goal>
-					</goals>
+						<phase>validate</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>
