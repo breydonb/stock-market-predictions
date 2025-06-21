@@ -62,6 +62,9 @@ workspace/
 jenkins_token
 jenkins-agent-workspace/
 
+# Prometheus
+prometheus/
+
 # Jenkins Agent
 remoting.jar
 caches*
