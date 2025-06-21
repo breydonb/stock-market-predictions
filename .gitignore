@@ -60,6 +60,7 @@ workspace/
 *.log
 *.tmp
 jenkins_token
+jenkins-agent-workspace
 
 # Jenkins Agent
 remoting.jar
