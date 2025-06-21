@@ -10,6 +10,20 @@ export class SpringApiClient implements ISpringApiClient {
     constructor(logger: ILogger) {
         this.logger = logger;
     }
+    async fetchStockTickers(): Promise<string | null> {
+        try {
+            const res = await fetch(`${this.baseUrl}/tickers`)
+            if (!res.ok) {
+                this.logger.error(`Error fetching data: ${res.status} ${res.statusText}`);
+                return null;
+            }
+            const data = await res.json();
+            return data;
+        } catch (e) {
+            this.logger.error("Unexpected error: ", e);
+            return null;
+        }
+    }
     async fetchStockByTicker(ticker: string): Promise<StockPrice[] | null> {
         try {
             const res = await fetch(`${this.baseUrl}/${ticker}`);

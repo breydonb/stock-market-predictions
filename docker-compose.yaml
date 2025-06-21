@@ -24,7 +24,7 @@ services:
     image: "node:latest"
     working_dir: /home/node/app
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=developer
     volumes:
       - ./front-end:/home/node/app
     depends_on:
@@ -34,7 +34,7 @@ services:
       - "5173"
     ports:
       - "5173:5173"
-    command: npm run dev --host
+    command: npm run dev --host 0.0.0.0
     networks:
       stock-prediction-network:
         ipv4_address: 172.28.0.2

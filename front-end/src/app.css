@@ -1,2 +1,17 @@
-@import 'tailwindcss';
-@plugin '@tailwindcss/typography';
+:root {
+  --color-bg: #E6DCD1;
+  --color-text: #000000;
+  --color-primary: #3b82f6; /* Tailwind blue-500 */
+}
+
+.theme-dark {
+  --color-bg: #1D4251;
+  --color-text: #ffffff;
+  --color-primary: #2563eb; /* darker blue */
+}
+
+.theme-light {
+  --color-bg: #ffe4e6;
+  --color-text: #7f1d1d;
+  --color-primary: #dc2626; /* red-600 */
+}

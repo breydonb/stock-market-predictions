@@ -1,29 +1,33 @@
-import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
-import type { ViteUserConfig } from 'vitest/config';
 import { defineConfig } from 'vitest/config'
 
-const mode = import.meta.env.VITE_ENV_MODE;
-
 export default defineConfig(({ mode }) => {
-	const isDev = mode == 'dev-mode'
-	const isTest = mode == 'unit-test';
-	const isProduction = mode == 'production';
+	const isDev = mode === 'developer'
+	const isTest = mode === 'unit-test';
+	const isProduction = mode === 'production';
+
+	const globalPlugin = [
+		sveltekit(),
+	]
+
 	return  {
-		plugins: [tailwindcss(), sveltekit()],
+		plugins: [
+			...(isDev ? [ /* developer plugins*/ ]: []),
+			...(isTest? [ /* test plugins*/  ] : []),
+			...(isProduction? [/*production only plugins*/] : []),
+			...globalPlugin
+		],
 		define: {
 			__APP_ENV__: JSON.stringify(mode),
+			__IS_PROD__: JSON.stringify(isProduction),
+			__IS_DEV__: JSON.stringify(isDev),
+			__IS_TEST__ : JSON.stringify(isTest),
 		},
 		build: {
 			minify: isProduction,
-			outDir: "/dist"
+			outDir: "/dist",
 		}
+	}
 });
 	
-function createPlugin(mode: string) {
-	const plugins = [sveltekit(), tailwindcss()];
-
-}
-
-
 
