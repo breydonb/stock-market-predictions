@@ -7,6 +7,7 @@
     import StockTable from "$lib/components/StockTable.svelte";
     import SelectTickerDropdown from "$lib/components/SelectTickerDropdown.svelte";
     import Navigation from "$lib/components/Navigation.svelte";
+    import CandlestickBrush from "$lib/components/charts/CandlestickBrush.svelte";
 
     let ticker = "";
     let loading = false;
@@ -78,5 +79,6 @@
 {:else}
     <StockTable { data } />
     <PredictionTable res={ predictionData } />
+    <CandlestickBrush ticker={ ticker }/>
 {/if}
 

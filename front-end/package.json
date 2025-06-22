@@ -7,7 +7,7 @@
 		"dev": "vite dev --host",
 		"build": "vite build",
 		"preview": "vite preview",
-		"lint": "eslint ."
+		"lint": "eslint . --ext .ts,.js,.svelte"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",
@@ -18,7 +18,8 @@
 		"@tailwindcss/typography": "^0.5.15",
 		"@tailwindcss/vite": "^4.0.0",
 		"autoprefixer": "^10.4.21",
-		"eslint": "^9.18.0",
+		"echarts": "^5.6.0",
+		"eslint": "^9.29.0",
 		"eslint-plugin-svelte": "^3.0.0",
 		"globals": "^16.0.0",
 		"mdsvex": "^0.12.3",

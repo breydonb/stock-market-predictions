@@ -1,106 +1,81 @@
 <script lang="ts">
-    import { onMount, onDestroy, afterUpdate } from 'svelte';
-
     import * as echarts from 'echarts/core';
-    import {
-        ToolboxComponent,
-        ToolboxComponentOption,
-        TooltipComponent,
-        TooltipComponentOption,
-        GridComponent,
-        GridComponentOption,
-        VisualMapComponent,
-        VisualMapComponentOption,
-        LegendComponent,
-        LegendComponentOption,
-        BrushComponent,
-        BrushComponentOption,
-        DataZoomComponent,
-        DataZoomComponentOption
-        } from 'echarts/components';
-    import {
-        CandlestickChart,
-        CandlestickSeriesOption,
-        LineChart,
-        LineSeriesOption,
-        BarChart,
-        BarSeriesOption
-    } from 'echarts/charts';
-    import { UniversalTransition } from 'echarts/features';
+    import { GridComponent, type GridComponentOption } from 'echarts/components';
+    import { CandlestickChart, type CandlestickSeriesOption } from 'echarts/charts';
     import { CanvasRenderer } from 'echarts/renderers';
+    import { fetchStockPrice } from '$lib/store/stockStore';
+    import { onMount } from 'svelte';
+    import { writable } from 'svelte/store';
     import type { StockPrice } from '$lib/types/StockPrice';
-    import { springApiClient } from '$lib/api';
-    export let ticker: string;
 
-    let chartEl: HTMLDivElement;
-
-    let chart: echarts.ECharts;
-
-    echarts.use([
-        ToolboxComponent,
-        TooltipComponent,
-        GridComponent,
-        VisualMapComponent,
-        LegendComponent,
-        BrushComponent,
-        DataZoomComponent,
-        CandlestickChart,
-        LineChart,
-        BarChart,
-        CanvasRenderer,
-        UniversalTransition
-    ]);
+    echarts.use([GridComponent, CandlestickChart, CanvasRenderer]);
 
     type EChartsOption = echarts.ComposeOption<
-        | ToolboxComponentOption
-        | TooltipComponentOption
-        | GridComponentOption
-        | VisualMapComponentOption
-        | LegendComponentOption
-        | BrushComponentOption
-        | DataZoomComponentOption
-        | CandlestickSeriesOption
-        | LineSeriesOption
-        | BarSeriesOption
-    >
+        GridComponentOption | CandlestickSeriesOption
+    >;
 
-    var chartDom = document.getElementById('main')!;
-    var myChart = echarts.init(chartDom);
-    var option: EChartsOption;
+    let chartDom: HTMLElement;
+    let myChart: echarts.ECharts;
+
+    export let ticker: string;
+
+    const stockData = writable<{ loading: boolean, data: StockPrice[] | null, error: string | null}>({
+        loading: false,
+        error: null,
+        data: null
+    });
 
     const upColor = '#00da3c';
     const downColor = '#ec0000';
 
-    async function drawChart() {
-        const data: StockPrice[] | null = await springApiClient.fetchStockByTicker(ticker);
-        if(!data) return;
+    onMount(async () => {
+        chartDom = document.getElementById('main')!;
+        myChart = echarts.init(chartDom);
 
-        
+        await loadDataAndDraw();
+    });
 
-        option = {
-            animation: false,
-            brush: [
+    async function loadDataAndDraw(){
+        stockData.set({ loading: true, error: null, data: null})
+        try {
+            const state = await fetchStockPrice(ticker);
+            stockData.set({ loading: false, error: null, data: state.data});
+            if (state.data) drawChart(state.data);
+        } catch (e) {
+            stockData.set({ loading: false, error: String(e), data: null});
+        }
+    }
 
-            ],
-            legend: {
-                bottom: 10,
-                left: 'center',
-                data: [ticker, "MA5", "MA10", "MA20", "MA30"]
+    function drawChart(data: StockPrice[]){
+        const formattedData = data.map(item => [
+            item.openPrice,
+            item.closingPrice,
+            item.lowPrice,
+            item.highPrice
+        ]);
+        const options: EChartsOption = {
+            xAxis: {
+                type: 'category',
+                data: data.map((_, i) => i.toString())
+            },
+            yAxis: {
+                scale: true,
+                type: "value",
             },
             series: [
                 {
-                    name: ticker,
-                    type: 'candlestick',
-                    data: data.map(stock => [stock.openPrice, stock.closingPrice, stock.lowPrice, stock.highPrice])
-                }
-            ]
-        }
-
-        myChart.setOption(option);
-    }
-
-
-    $: if (data) {
-        drawChart
+                    type:"candlestick",
+                    data: formattedData,
+                    itemStyle: {
+                        color: upColor,
+                        color0: downColor,
+                        borderColor: upColor,
+                        borderColor0: downColor
+                    }
+                }]
+            };
+        myChart.setOption(options);
     }
 </script>
+
+<div id='main' class="w-full h-[400px]"></div>

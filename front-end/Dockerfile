@@ -5,10 +5,11 @@ WORKDIR /home/node/app
 COPY package*.json ./
 
 RUN npm install -g npm@11.4.2
+RUN npm install
 
-COPY --chown=root:node . .
+COPY --chown=node:node . .
 
-RUN chown -R root:node /home/node/app && \
+RUN chown -R node:node /home/node/app && \
     chmod -R g+rwX /home/node/app
 
 USER node
