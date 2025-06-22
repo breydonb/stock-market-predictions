@@ -5,14 +5,13 @@
     import DarkModeButton from "$lib/components/DarkModeButton.svelte";
     import PredictionTable from "$lib/components/PredictionTable.svelte";
     import StockTable from "$lib/components/StockTable.svelte";
-    // import { Logger } from "$lib/utils/Logger";
+    import SelectTickerDropdown from "$lib/components/SelectTickerDropdown.svelte";
+    import Navigation from "$lib/components/Navigation.svelte";
 
     let ticker = "";
     let loading = false;
     let data: StockPrice[] | null = null;
     let predictionData: PredictionResponse | null = null;
-
-    // const logger = new Logger();
 
     async function handleChange(event: Event) {
         const target = event.target as HTMLSelectElement;
@@ -45,22 +44,37 @@
     }
 
     $: predictedValues = predictionData?.predictions ?? [];
+    
 </script>
 
-<div>
-    <label for="tickerDropdown">Select a Ticker:</label>
-    <select name="tickers" id="ticker" on:change={handleChange} disabled={loading}>
-        <option value="">Select</option>
-        <option value="AAPL">Apple</option>
-        <option value="TMUS">T-Mobile</option>
-    </select>
-    <DarkModeButton />
+<Navigation
+    links = {[
+        { name: "Home", href: "/"},
+        { name: "Predictions", href: "/predictions"},
+        { name: "About", href: "/about"}
+    ]}
+>
+<DarkModeButton slot="dark-mode-button" />
+</Navigation>
+
+<div class="flex flex-column items-center justify-center w-full px-2">
+    <div>
+        <SelectTickerDropdown
+            loading = { loading }
+            selected = { ticker }
+            onChange = { handleChange }
+        />
+    </div>
 </div>
 
+<h1 class="text-center text-2xl ">{ ticker ? `Stock Data For ${ticker}` : ``}</h1>
+<div class="text-primary">
+    test
+</div>
 {#if loading}
     <p>Loading...</p>
 {:else if !data || !predictedValues.length}
-    <p class="error">Please select a stock by ticker on select menu</p>
+    <p class="p-4">Please select a stock by ticker on select menu</p>
 {:else}
     <StockTable { data } />
     <PredictionTable res={ predictionData } />

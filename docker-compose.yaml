@@ -20,21 +20,20 @@ services:
       stock-prediction-network:
         ipv4_address: 172.28.0.6
 
-  svelt-app:
-    image: "node:latest"
-    working_dir: /home/node/app
-    environment:
-      - NODE_ENV=developer
-    volumes:
-      - ./front-end:/home/node/app
+  svelte-app:
+    build:
+      context: ./front-end
+      dockerfile: Dockerfile
+    user: "node:node"
     depends_on:
       - database
       - spring-boot-api
-    expose:
-      - "5173"
     ports:
       - "5173:5173"
-    command: npm run dev --host 0.0.0.0
+    volumes:
+      - ./front-end:/home/node/app
+      - /home/node/app/node_modules 
+      - /home/node/app/.svelte-kit
     networks:
       stock-prediction-network:
         ipv4_address: 172.28.0.2

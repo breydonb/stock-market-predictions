@@ -7,7 +7,7 @@ export default defineConfig(({ mode }) => {
 	const isProduction = mode === 'production';
 
 	const globalPlugin = [
-		sveltekit(),
+		sveltekit()
 	]
 
 	return  {

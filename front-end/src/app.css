@@ -1,17 +1,22 @@
+@import "tailwindcss";
+
 :root {
-  --color-bg: #E6DCD1;
+  --default-font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Microsoft YaHei Light", sans-serif;
+  --color-bg: #C4BCB3;
   --color-text: #000000;
-  --color-primary: #3b82f6; /* Tailwind blue-500 */
+  --color-primary: #51f63b;
+  --color-nav-bg: #505050;
 }
 
-.theme-dark {
+html.dark {
   --color-bg: #1D4251;
   --color-text: #ffffff;
-  --color-primary: #2563eb; /* darker blue */
+  --color-primary: #2563eb;
+  --color-nav-bg: #0e1953;
 }
 
-.theme-light {
-  --color-bg: #ffe4e6;
-  --color-text: #7f1d1d;
-  --color-primary: #dc2626; /* red-600 */
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
