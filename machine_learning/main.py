@@ -1,3 +1,4 @@
+import psycopg2
 from sklearn.linear_model import LinearRegression
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
@@ -30,8 +31,36 @@ class PredictionWithTimestamp(BaseModel):
 class PredictionResponse(BaseModel):
     predictions: List[PredictionWithTimestamp]
     r_squared: float
+    
+class StockPriceData(BaseModel):
+    ticker: str
+    openPrice: float
+    highPrice: float
+    volume: float
+    lowPrice: float
+    closingPrice: float
+    
 
-async def get_stock_data(ticker: str) -> pd.DataFrame:
+def query_stock_data_by_ticker(ticker: str) -> pd.DataFrame:
+    sql_query = "SELECT * FROM stock_data WHERE ticker= %s"
+    conn = psycopg2.connect(
+        host="localhost",
+        database="postgres",
+        user="postgres",
+        password="admin",
+        port="5432"
+    )
+    
+    df = pd.read_sql_query(sql_query, conn, params=(ticker,))
+    conn.close()
+    
+    if 'id' in df.columns:
+        df.drop(columns=['id'], inplace=True)
+    return df
+        
+
+
+async def get_stock_data(ticker: str) -> PredictionResponse:
     url = f"http://stock-market-prediction-spring-boot-api-1:8080/api/stock_data/{ticker}"
     async with httpx.AsyncClient() as client:
         res = await client.get(url)
@@ -52,7 +81,7 @@ async def get_stock_data(ticker: str) -> pd.DataFrame:
 
 @app.post("/predict/{ticker}", response_model=PredictionResponse)
 async def predict(ticker: str = Path(...)):
-    df = await get_stock_data(ticker)
+    df = query_stock_data_by_ticker(ticker)
     x = df[['volume', 'openPrice', 'highPrice', 'lowPrice']]
     y = df['closingPrice']
     
